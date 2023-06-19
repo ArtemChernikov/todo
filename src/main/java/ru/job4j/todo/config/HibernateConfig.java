@@ -5,12 +5,14 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author Artem Chernikov
  * @version 1.0
  * @since 19.06.2023
  */
+@Configuration
 public class HibernateConfig {
     @Bean(destroyMethod = "close")
     public SessionFactory sf() {
