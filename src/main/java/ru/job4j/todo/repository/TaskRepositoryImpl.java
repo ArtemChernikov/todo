@@ -59,20 +59,37 @@ public class TaskRepositoryImpl implements TaskRepository {
     @Override
     public boolean deleteById(Integer taskId) {
         Session session = sessionFactory.openSession();
+        boolean isDeleted = false;
 
         try {
             session.beginTransaction();
-            session.createQuery("DELETE Task WHERE id = :id")
+            int effectedRows = session.createQuery("DELETE Task WHERE id = :id")
                     .setParameter("id", taskId)
                     .executeUpdate();
             session.getTransaction().commit();
-            return true;
+            isDeleted = effectedRows > 0;
         } catch (Exception e) {
             session.getTransaction().rollback();
         } finally {
             session.close();
         }
-        return false;
+        return isDeleted;
+    }
+
+    @Override
+    public void deleteAll() {
+        Session session = sessionFactory.openSession();
+
+        try {
+            session.beginTransaction();
+            session.createQuery("DELETE FROM Task")
+                    .executeUpdate();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
     }
 
     @Override

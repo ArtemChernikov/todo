@@ -13,6 +13,8 @@ public interface TaskRepository {
 
     boolean deleteById(Integer taskId);
 
+    void deleteAll();
+
     Optional<Task> findById(Integer taskId);
 
     List<Task> findAll();
