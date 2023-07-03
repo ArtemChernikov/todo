@@ -8,7 +8,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import ru.job4j.todo.model.Task;
+import ru.job4j.todo.model.entity.Task;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -43,18 +43,18 @@ class TaskRepositoryImplTest {
 
     @Test
     public void whenAddNewTask() {
-        Task expectedTask = Task.builder()
+        Task savedTask = Task.builder()
                 .description("actual description")
                 .created(LocalDateTime.now())
                 .build();
-        taskRepository.create(expectedTask);
-        Integer expectedTaskId = expectedTask.getId();
+        Optional<Task> expectedTask = taskRepository.create(savedTask);
+        Integer expectedTaskId = savedTask.getId();
 
         Task actualTask = taskRepository.findById(expectedTaskId).get();
 
         assertThat(actualTask)
                 .usingRecursiveComparison(recursiveComparisonConfiguration)
-                .isEqualTo(expectedTask);
+                .isEqualTo(expectedTask.get());
     }
 
     @Test
@@ -252,7 +252,7 @@ class TaskRepositoryImplTest {
         taskRepository.create(task3);
         List<Task> expectedTasks = List.of(task1, task2);
 
-        List<Task> actualTasks = taskRepository.findAllCompletedTasks();
+        List<Task> actualTasks = taskRepository.findNewTasks();
 
         assertTaskList(actualTasks, expectedTasks);
     }

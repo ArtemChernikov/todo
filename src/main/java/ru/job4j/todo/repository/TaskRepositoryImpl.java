@@ -5,7 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
-import ru.job4j.todo.model.Task;
+import ru.job4j.todo.model.entity.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,20 +23,22 @@ public class TaskRepositoryImpl implements TaskRepository {
     private final SessionFactory sessionFactory;
 
     @Override
-    public Task create(Task task) {
+    public Optional<Task> create(Task task) {
         Session session = sessionFactory.openSession();
+        Optional<Task> savedTask = Optional.empty();
 
         try {
             session.beginTransaction();
             session.save(task);
             session.getTransaction().commit();
+            savedTask = Optional.of(task);
         } catch (Exception e) {
             session.getTransaction().rollback();
         } finally {
             session.close();
         }
 
-        return task;
+        return savedTask;
     }
 
     @Override
