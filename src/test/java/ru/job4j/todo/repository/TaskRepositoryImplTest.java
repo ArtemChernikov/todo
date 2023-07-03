@@ -200,10 +200,67 @@ class TaskRepositoryImplTest {
 
         List<Task> actualTasks = taskRepository.findAll();
 
-        assertThat(actualTasks).usingRecursiveComparison(recursiveComparisonConfiguration).isEqualTo(expectedTasks);
+        assertTaskList(actualTasks, expectedTasks);
+    }
+
+    @Test
+    public void whenFindAllCompletedTasks() {
+        Task task1 = Task.builder()
+                .description("description1")
+                .created(LocalDateTime.now())
+                .done(true)
+                .build();
+        Task task2 = Task.builder()
+                .description("description2")
+                .created(LocalDateTime.now())
+                .done(true)
+                .build();
+        Task task3 = Task.builder()
+                .description("description2")
+                .created(LocalDateTime.now())
+                .done(false)
+                .build();
+        taskRepository.create(task1);
+        taskRepository.create(task2);
+        taskRepository.create(task3);
+        List<Task> expectedTasks = List.of(task1, task2);
+
+        List<Task> actualTasks = taskRepository.findAllCompletedTasks();
+
+        assertTaskList(actualTasks, expectedTasks);
+    }
+
+    @Test
+    public void whenFindNewTasks() {
+        Task task1 = Task.builder()
+                .description("description1")
+                .created(LocalDateTime.now().minusHours(10))
+                .done(true)
+                .build();
+        Task task2 = Task.builder()
+                .description("description2")
+                .created(LocalDateTime.now())
+                .done(true)
+                .build();
+        Task task3 = Task.builder()
+                .description("description2")
+                .created(LocalDateTime.now().minusDays(1))
+                .done(false)
+                .build();
+        taskRepository.create(task1);
+        taskRepository.create(task2);
+        taskRepository.create(task3);
+        List<Task> expectedTasks = List.of(task1, task2);
+
+        List<Task> actualTasks = taskRepository.findAllCompletedTasks();
+
+        assertTaskList(actualTasks, expectedTasks);
     }
 
     private static final BiPredicate<LocalDateTime, LocalDateTime> localDateTimeMatches = (first, second) ->
             first.truncatedTo(ChronoUnit.SECONDS).isEqual(second.truncatedTo(ChronoUnit.SECONDS));
 
+    private void assertTaskList(List<Task> actual, List<Task> expected) {
+        assertThat(actual).usingRecursiveComparison(recursiveComparisonConfiguration).isEqualTo(expected);
+    }
 }

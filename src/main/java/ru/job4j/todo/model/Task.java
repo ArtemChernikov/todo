@@ -31,8 +31,8 @@ public class Task {
     Integer id;
     @Column(name = "description", nullable = false)
     String description;
-    @Column(name = "created", nullable = false)
-    LocalDateTime created;
+    @Column(name = "created")
+    LocalDateTime created = LocalDateTime.now();
     @Column(name = "done", nullable = false, columnDefinition = "boolean default false")
     boolean done;
 }
