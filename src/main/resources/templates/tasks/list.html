@@ -40,19 +40,19 @@
                 <thead>
                 <tr>
                     <th>№</th>
-                    <th>Описание</th>
+                    <th>Название</th>
                     <th>Дата создания</th>
                     <th>Состояние</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="task: ${tasks}" class="white">
-                    <td th:text="${task.getId()}"/>
-                    <td th:text="${task.description}"/>
-                    <td th:text="${#temporals.format(task.getCreated(), 'd MMMM HH:mm')}"/>
+                    <td th:text="${task.id}"/>
+                    <td th:text="${task.name}"/>
+                    <td th:text="${#temporals.format(task.created, 'd MMMM HH:mm')}"/>
                     <td>
-                        <span th:text="${task.isDone() ? 'Выполнено' : 'Выполняется'}"
-                              th:class="${task.isDone() ? 'completed' : 'new'}"></span>
+                        <span th:text="${task.done ? 'Выполнено' : 'Выполняется'}"
+                              th:class="${task.done ? 'completed' : 'new'}"></span>
                     </td>
                 </tr>
                 </tbody>

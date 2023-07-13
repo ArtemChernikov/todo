@@ -23,7 +23,7 @@ class TaskMapperTest {
 
     @Test
     public void whenTaskToTaskDto() {
-        Task task = new Task(1, "desc", LocalDateTime.now(), true);
+        Task task = new Task(1, "name", "desc", LocalDateTime.now(), true);
 
         TaskDto taskDto = mapper.taskToTaskDto(task);
 
@@ -32,7 +32,7 @@ class TaskMapperTest {
 
     @Test
     public void whenTaskDtoToTask() {
-        TaskDto taskDto = new TaskDto(1, "desc", LocalDateTime.now(), false);
+        TaskDto taskDto = new TaskDto(1, "name", "desc", LocalDateTime.now(), true);
 
         Task task = mapper.taskDtoToTask(taskDto);
 
@@ -41,8 +41,8 @@ class TaskMapperTest {
 
     @Test
     public void whenTaskListToTaskDtoList() {
-        List<Task> taskList = List.of(new Task(1, "desc", LocalDateTime.now(), true),
-                new Task(1, "desc", LocalDateTime.now(), true));
+        List<Task> taskList = List.of(new Task(1, "name", "desc", LocalDateTime.now(), true),
+                new Task(1, "name", "desc", LocalDateTime.now(), true));
 
         List<TaskDto> taskDtoList = mapper.taskListToTaskDtoList(taskList);
 
@@ -51,8 +51,8 @@ class TaskMapperTest {
 
     @Test
     public void whenTaskDtoListToTaskList() {
-        List<TaskDto> taskDtoList = List.of(new TaskDto(1, "desc", LocalDateTime.now(), false),
-                new TaskDto(1, "desc", LocalDateTime.now(), false));
+        List<TaskDto> taskDtoList = List.of(new TaskDto(1, "name", "desc", LocalDateTime.now(), true),
+                new TaskDto(1, "name", "desc", LocalDateTime.now(), true));
 
         List<Task> taskList = mapper.taskDtoListToTaskList(taskDtoList);
 

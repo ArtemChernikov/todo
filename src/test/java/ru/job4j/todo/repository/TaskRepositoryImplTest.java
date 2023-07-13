@@ -29,8 +29,7 @@ class TaskRepositoryImplTest {
 
     @BeforeAll
     public static void init() {
-        StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
-                .configure().build();
+        StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
         SessionFactory sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
 
         taskRepository = new TaskRepositoryImpl(sessionFactory);
@@ -44,6 +43,7 @@ class TaskRepositoryImplTest {
     @Test
     public void whenAddNewTask() {
         Task savedTask = Task.builder()
+                .name("actual name")
                 .description("actual description")
                 .created(LocalDateTime.now())
                 .build();
@@ -59,9 +59,11 @@ class TaskRepositoryImplTest {
 
     @Test
     public void whenUpdateTaskIsSuccessByValidId() {
+        String nameForUpdate = "new name";
         String descriptionForUpdate = "new description";
         LocalDateTime createdForUpdate = LocalDateTime.now().plusDays(2);
         Task oldTask = Task.builder()
+                .name("old name")
                 .description("old description")
                 .created(LocalDateTime.now())
                 .build();
@@ -69,6 +71,7 @@ class TaskRepositoryImplTest {
         Integer taskId = oldTask.getId();
         Task taskForUpdate = Task.builder()
                 .id(taskId)
+                .name(nameForUpdate)
                 .description(descriptionForUpdate)
                 .created(createdForUpdate)
                 .build();
@@ -82,6 +85,7 @@ class TaskRepositoryImplTest {
 
     @Test
     public void whenUpdateTaskIsNotSuccessByInvalidId() {
+        String nameForUpdate = "new name";
         String descriptionForUpdate = "new description";
         LocalDateTime createdForUpdate = LocalDateTime.now().plusDays(2);
         Task oldTask = Task.builder()
@@ -92,6 +96,7 @@ class TaskRepositoryImplTest {
         Integer notValidTaskId = 999;
         Task taskForUpdate = Task.builder()
                 .id(notValidTaskId)
+                .name(nameForUpdate)
                 .description(descriptionForUpdate)
                 .created(createdForUpdate)
                 .build();
@@ -104,6 +109,7 @@ class TaskRepositoryImplTest {
     @Test
     public void whenDeleteTaskIsSuccessByValidId() {
         Task taskForDelete = Task.builder()
+                .name("actual name")
                 .description("actual description")
                 .created(LocalDateTime.now())
                 .build();
@@ -120,6 +126,7 @@ class TaskRepositoryImplTest {
     @Test
     public void whenDeleteTaskIsNotSuccessByInvalidId() {
         Task taskForDelete = Task.builder()
+                .name("actual name")
                 .description("actual description")
                 .created(LocalDateTime.now())
                 .build();
@@ -136,10 +143,12 @@ class TaskRepositoryImplTest {
     @Test
     public void whenDeleteAll() {
         Task task1 = Task.builder()
+                .name("name1")
                 .description("description1")
                 .created(LocalDateTime.now())
                 .build();
         Task task2 = Task.builder()
+                .name("name2")
                 .description("description2")
                 .created(LocalDateTime.now())
                 .build();
@@ -159,6 +168,7 @@ class TaskRepositoryImplTest {
     @Test
     public void whenFindByValidId() {
         Task expectedTask = Task.builder()
+                .name("actual name")
                 .description("actual description")
                 .created(LocalDateTime.now())
                 .build();
@@ -187,10 +197,12 @@ class TaskRepositoryImplTest {
     @Test
     public void whenFindAll() {
         Task task1 = Task.builder()
+                .name("name1")
                 .description("description1")
                 .created(LocalDateTime.now())
                 .build();
         Task task2 = Task.builder()
+                .name("name2")
                 .description("description2")
                 .created(LocalDateTime.now())
                 .build();
@@ -206,16 +218,19 @@ class TaskRepositoryImplTest {
     @Test
     public void whenFindAllCompletedTasks() {
         Task task1 = Task.builder()
+                .name("name1")
                 .description("description1")
                 .created(LocalDateTime.now())
                 .done(true)
                 .build();
         Task task2 = Task.builder()
+                .name("name2")
                 .description("description2")
                 .created(LocalDateTime.now())
                 .done(true)
                 .build();
         Task task3 = Task.builder()
+                .name("name3")
                 .description("description2")
                 .created(LocalDateTime.now())
                 .done(false)
@@ -233,16 +248,19 @@ class TaskRepositoryImplTest {
     @Test
     public void whenFindNewTasks() {
         Task task1 = Task.builder()
+                .name("name1")
                 .description("description1")
                 .created(LocalDateTime.now().minusHours(10))
                 .done(true)
                 .build();
         Task task2 = Task.builder()
+                .name("name2")
                 .description("description2")
                 .created(LocalDateTime.now())
                 .done(true)
                 .build();
         Task task3 = Task.builder()
+                .name("name3")
                 .description("description2")
                 .created(LocalDateTime.now().minusDays(1))
                 .done(false)
