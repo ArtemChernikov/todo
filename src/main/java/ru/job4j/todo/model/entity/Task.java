@@ -28,11 +28,14 @@ public class Task {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    private Integer id;
+
     @Column(name = "description", nullable = false)
-    String description;
-    @Column(name = "created")
-    LocalDateTime created = LocalDateTime.now();
+    private String description;
+
+    @Column(name = "created", nullable = false)
+    private LocalDateTime created = LocalDateTime.now();
+
     @Column(name = "done", nullable = false, columnDefinition = "boolean default false")
-    boolean done;
+    private boolean done;
 }

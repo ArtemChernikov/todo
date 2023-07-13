@@ -16,11 +16,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class TaskDto {
 
-    Integer id;
+    private Integer id;
 
-    String description;
+    private String description;
 
-    LocalDateTime created;
+    private LocalDateTime created;
 
-    boolean done;
+    private boolean done;
 }
