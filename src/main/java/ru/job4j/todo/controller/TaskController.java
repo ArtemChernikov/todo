@@ -43,4 +43,18 @@ public class TaskController {
         return "redirect:/";
     }
 
+    @GetMapping("/completed")
+    public String getCompletedTasks(Model model) {
+        List<TaskDto> tasks = taskService.getAllCompletedTasks();
+        model.addAttribute("completedTasks", tasks);
+        return "tasks/completed";
+    }
+
+    @GetMapping("/new")
+    public String getNewTasks(Model model) {
+        List<TaskDto> tasks = taskService.getNewTasks();
+        model.addAttribute("newTasks", tasks);
+        return "tasks/new";
+    }
+
 }

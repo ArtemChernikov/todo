@@ -23,9 +23,9 @@
             <a class="navbar-brand" href="/">Job4j_ToDoList</a>
             <div class="collapse navbar-collapse">
                 <div class="navbar-nav me-auto">
-                    <a class="nav-item nav-link active" href="/tasks">Все</a>
-                    <a class="nav-item nav-link">Выполненные</a>
-                    <a class="nav-item nav-link">Новые</a>
+                    <a class="nav-item nav-link active" href="/">Все</a>
+                    <a class="nav-item nav-link" th:href="@{/completed}">Выполненные</a>
+                    <a class="nav-item nav-link" th:href="@{/new}">Новые</a>
                     <a class="nav-item nav-link" th:href="@{/create}">Добавить задание</a>
                 </div>
             </div>
