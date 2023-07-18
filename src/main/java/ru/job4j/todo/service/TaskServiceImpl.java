@@ -51,6 +51,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public void completeTask(Integer id) {
+        repository.completeTask(id);
+    }
+
+    @Override
     public Optional<TaskDto> getById(Integer taskId) {
         Optional<Task> findTask = repository.findById(taskId);
         Optional<TaskDto> findTaskDto = Optional.empty();

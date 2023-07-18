@@ -16,6 +16,8 @@ public interface TaskService {
 
     void deleteAll();
 
+    void completeTask(Integer id);
+
     Optional<TaskDto> getById(Integer taskId);
 
     List<TaskDto> getAll();

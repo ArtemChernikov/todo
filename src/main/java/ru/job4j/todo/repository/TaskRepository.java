@@ -15,6 +15,8 @@ public interface TaskRepository {
 
     void deleteAll();
 
+    void completeTask(Integer id);
+
     Optional<Task> findById(Integer taskId);
 
     List<Task> findAll();

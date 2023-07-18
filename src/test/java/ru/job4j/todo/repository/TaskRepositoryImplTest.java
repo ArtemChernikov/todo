@@ -141,6 +141,23 @@ class TaskRepositoryImplTest {
     }
 
     @Test
+    public void whenCompleteTask() {
+        Task task = Task.builder()
+                .name("name")
+                .description("desc")
+                .created(LocalDateTime.now())
+                .done(false)
+                .build();
+        taskRepository.create(task);
+        Integer taskId = task.getId();
+
+        taskRepository.completeTask(taskId);
+        boolean actualDone = taskRepository.findById(taskId).get().isDone();
+
+        assertThat(actualDone).isTrue();
+    }
+
+    @Test
     public void whenDeleteAll() {
         Task task1 = Task.builder()
                 .name("name1")

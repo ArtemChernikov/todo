@@ -95,6 +95,23 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
+    public void completeTask(Integer id) {
+        Session session = sessionFactory.openSession();
+
+        try {
+            session.beginTransaction();
+            session.createQuery("UPDATE FROM Task SET done = true WHERE id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
     public Optional<Task> findById(Integer taskId) {
         Session session = sessionFactory.openSession();
         Optional<Task> task = Optional.empty();
@@ -156,7 +173,7 @@ public class TaskRepositoryImpl implements TaskRepository {
 
         try {
             session.beginTransaction();
-            Query<Task> query = session.createQuery("FROM Task WHERE created > current_date", Task.class);
+            Query<Task> query = session.createQuery("FROM Task WHERE done = false", Task.class);
             tasks = query.getResultList();
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -166,4 +183,6 @@ public class TaskRepositoryImpl implements TaskRepository {
         }
         return tasks;
     }
+
+
 }

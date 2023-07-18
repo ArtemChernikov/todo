@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.job4j.todo.model.dto.TaskDto;
@@ -12,6 +13,7 @@ import ru.job4j.todo.model.entity.Task;
 import ru.job4j.todo.service.TaskService;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Artem Chernikov
@@ -55,6 +57,33 @@ public class TaskController {
         List<TaskDto> tasks = taskService.getNewTasks();
         model.addAttribute("newTasks", tasks);
         return "tasks/new";
+    }
+
+    @GetMapping("/task/{id}")
+    public String getTaskById(Model model, @PathVariable Integer id) {
+        Optional<TaskDto> optionalTaskDto = taskService.getById(id);
+        if (optionalTaskDto.isEmpty()) {
+            model.addAttribute("message", "Задача с указанным идентификатором не найдена");
+            return "errors/404";
+        }
+        model.addAttribute("task", optionalTaskDto.get());
+        return "tasks/task";
+    }
+
+    @PostMapping("/task/complete/{id}")
+    public String completeTask(@PathVariable Integer id) {
+        taskService.completeTask(id);
+        return "redirect:/";
+    }
+
+    @GetMapping("/task/delete/{id}")
+    public String delete(Model model, @PathVariable Integer id) {
+        var isDeleted = taskService.deleteById(id);
+        if (!isDeleted) {
+            model.addAttribute("message", "Задача с указанным идентификатором не найдена");
+            return "errors/404";
+        }
+        return "redirect:/";
     }
 
 }
