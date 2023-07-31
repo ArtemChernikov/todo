@@ -70,7 +70,7 @@ public class TaskController {
         return "tasks/task";
     }
 
-    @PostMapping("/task/complete/{id}")
+    @GetMapping("/task/complete/{id}")
     public String completeTask(@PathVariable Integer id) {
         taskService.completeTask(id);
         return "redirect:/";
@@ -83,6 +83,29 @@ public class TaskController {
             model.addAttribute("message", "Задача с указанным идентификатором не найдена");
             return "errors/404";
         }
+        return "redirect:/";
+    }
+
+    @GetMapping("/task/update/{id}")
+    public String getUpdatePage(Model model, @PathVariable Integer id) {
+        Optional<TaskDto> optionalTaskDto = taskService.getById(id);
+        if (optionalTaskDto.isEmpty()) {
+            model.addAttribute("message", "Задача с указанным идентификатором не найдена");
+            return "errors/404";
+        }
+        model.addAttribute("task", optionalTaskDto.get());
+        return "tasks/update";
+    }
+
+    @PostMapping("/task/update/{id}")
+    public String update(@ModelAttribute Task task, Model model) {
+        System.out.println(task);
+        var isUpdate = taskService.update(task);
+        if (!isUpdate) {
+            model.addAttribute("message", "Задача с указанным идентификатором не найдена");
+            return "errors/404";
+        }
+        System.out.println(task);
         return "redirect:/";
     }
 

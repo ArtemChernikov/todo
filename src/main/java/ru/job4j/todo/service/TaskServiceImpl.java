@@ -84,4 +84,5 @@ public class TaskServiceImpl implements TaskService {
         List<Task> taskList = repository.findNewTasks();
         return mapper.taskListToTaskDtoList(taskList);
     }
+
 }

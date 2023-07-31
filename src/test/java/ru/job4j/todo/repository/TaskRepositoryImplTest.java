@@ -268,19 +268,19 @@ class TaskRepositoryImplTest {
                 .name("name1")
                 .description("description1")
                 .created(LocalDateTime.now().minusHours(10))
-                .done(true)
+                .done(false)
                 .build();
         Task task2 = Task.builder()
                 .name("name2")
                 .description("description2")
                 .created(LocalDateTime.now())
-                .done(true)
+                .done(false)
                 .build();
         Task task3 = Task.builder()
                 .name("name3")
                 .description("description2")
                 .created(LocalDateTime.now().minusDays(1))
-                .done(false)
+                .done(true)
                 .build();
         taskRepository.create(task1);
         taskRepository.create(task2);
