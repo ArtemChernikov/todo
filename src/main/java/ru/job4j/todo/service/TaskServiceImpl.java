@@ -51,8 +51,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void completeTask(Integer id) {
-        repository.completeTask(id);
+    public boolean completeTask(Integer id) {
+        return repository.completeTask(id);
     }
 
     @Override

@@ -151,9 +151,10 @@ class TaskRepositoryImplTest {
         taskRepository.create(task);
         Integer taskId = task.getId();
 
-        taskRepository.completeTask(taskId);
+        boolean isComplete = taskRepository.completeTask(taskId);
         boolean actualDone = taskRepository.findById(taskId).get().isDone();
 
+        assertThat(isComplete).isTrue();
         assertThat(actualDone).isTrue();
     }
 

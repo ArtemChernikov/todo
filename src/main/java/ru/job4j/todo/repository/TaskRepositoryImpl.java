@@ -95,7 +95,7 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public void completeTask(Integer id) {
+    public boolean completeTask(Integer id) {
         Session session = sessionFactory.openSession();
 
         try {
@@ -104,11 +104,13 @@ public class TaskRepositoryImpl implements TaskRepository {
                     .setParameter("id", id)
                     .executeUpdate();
             session.getTransaction().commit();
+            return true;
         } catch (Exception e) {
             session.getTransaction().rollback();
         } finally {
             session.close();
         }
+        return false;
     }
 
     @Override

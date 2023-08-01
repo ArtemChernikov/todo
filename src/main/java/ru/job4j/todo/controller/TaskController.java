@@ -71,8 +71,12 @@ public class TaskController {
     }
 
     @GetMapping("/task/complete/{id}")
-    public String completeTask(@PathVariable Integer id) {
-        taskService.completeTask(id);
+    public String completeTask(Model model, @PathVariable Integer id) {
+        var isCompleted = taskService.completeTask(id);
+        if (!isCompleted) {
+            model.addAttribute("message", "Задача с указанным идентификатором не найдена");
+            return "errors/404";
+        }
         return "redirect:/";
     }
 
@@ -99,13 +103,11 @@ public class TaskController {
 
     @PostMapping("/task/update/{id}")
     public String update(@ModelAttribute Task task, Model model) {
-        System.out.println(task);
         var isUpdate = taskService.update(task);
         if (!isUpdate) {
             model.addAttribute("message", "Задача с указанным идентификатором не найдена");
             return "errors/404";
         }
-        System.out.println(task);
         return "redirect:/";
     }
 
