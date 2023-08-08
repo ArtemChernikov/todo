@@ -21,7 +21,5 @@ public interface TaskRepository {
 
     List<Task> findAll();
 
-    List<Task> findAllCompletedTasks();
-
-    List<Task> findNewTasks();
+    List<Task> findTasksByDone(boolean done);
 }

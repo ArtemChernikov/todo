@@ -1,9 +1,6 @@
 package ru.job4j.todo.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -20,25 +17,29 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "tasks")
-@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Task {
+    @EqualsAndHashCode.Include
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name", nullable = false)
+    @EqualsAndHashCode.Include
+    @Column(nullable = false)
     private String name;
 
-    @Column(name = "description", nullable = false)
+    @Column(nullable = false)
     private String description;
 
-    @Column(name = "created", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime created = LocalDateTime.now();
 
-    @Column(name = "done", nullable = false, columnDefinition = "boolean default false")
+    @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean done;
 }

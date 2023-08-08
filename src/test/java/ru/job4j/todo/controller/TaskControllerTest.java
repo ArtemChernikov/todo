@@ -57,9 +57,9 @@ class TaskControllerTest {
 
         Model model = new ConcurrentModel();
         String view = taskController.getCompletedTasks(model);
-        Object tasks = model.getAttribute("completedTasks");
+        Object tasks = model.getAttribute("tasks");
 
-        assertThat(view).isEqualTo("tasks/completed");
+        assertThat(view).isEqualTo("tasks/list");
         assertThat(tasks).usingRecursiveComparison().isEqualTo(taskDtoList);
     }
 
@@ -72,9 +72,9 @@ class TaskControllerTest {
 
         Model model = new ConcurrentModel();
         String view = taskController.getNewTasks(model);
-        Object tasks = model.getAttribute("newTasks");
+        Object tasks = model.getAttribute("tasks");
 
-        assertThat(view).isEqualTo("tasks/new");
+        assertThat(view).isEqualTo("tasks/list");
         assertThat(tasks).usingRecursiveComparison().isEqualTo(taskDtoList);
     }
 
@@ -114,7 +114,7 @@ class TaskControllerTest {
         Model model = new ConcurrentModel();
         String view = taskController.completeTask(model, taskId);
 
-        assertThat(view).isEqualTo("redirect:/");
+        assertThat(view).isEqualTo("redirect:/tasks");
     }
 
     @Test
@@ -139,7 +139,7 @@ class TaskControllerTest {
         Model model = new ConcurrentModel();
         String view = taskController.delete(model, taskId);
 
-        assertThat(view).isEqualTo("redirect:/");
+        assertThat(view).isEqualTo("redirect:/tasks");
     }
 
     @Test
@@ -193,7 +193,7 @@ class TaskControllerTest {
         Model model = new ConcurrentModel();
         String view = taskController.update(task1, model);
 
-        assertThat(view).isEqualTo("redirect:/");
+        assertThat(view).isEqualTo("redirect:/tasks");
     }
 
     @Test

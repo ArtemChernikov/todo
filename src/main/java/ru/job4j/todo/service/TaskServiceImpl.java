@@ -75,13 +75,13 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskDto> getAllCompletedTasks() {
-        List<Task> taskList = repository.findAllCompletedTasks();
+        List<Task> taskList = repository.findTasksByDone(true);
         return mapper.taskListToTaskDtoList(taskList);
     }
 
     @Override
     public List<TaskDto> getNewTasks() {
-        List<Task> taskList = repository.findNewTasks();
+        List<Task> taskList = repository.findTasksByDone(false);
         return mapper.taskListToTaskDtoList(taskList);
     }
 

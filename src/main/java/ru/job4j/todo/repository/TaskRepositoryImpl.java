@@ -151,31 +151,14 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public List<Task> findAllCompletedTasks() {
+    public List<Task> findTasksByDone(boolean done) {
         Session session = sessionFactory.openSession();
         List<Task> tasks = new ArrayList<>();
 
         try {
             session.beginTransaction();
-            Query<Task> query = session.createQuery("FROM Task WHERE done = true", Task.class);
-            tasks = query.getResultList();
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-        } finally {
-            session.close();
-        }
-        return tasks;
-    }
-
-    @Override
-    public List<Task> findNewTasks() {
-        Session session = sessionFactory.openSession();
-        List<Task> tasks = new ArrayList<>();
-
-        try {
-            session.beginTransaction();
-            Query<Task> query = session.createQuery("FROM Task WHERE done = false", Task.class);
+            Query<Task> query = session.createQuery("FROM Task WHERE done = :done", Task.class)
+                    .setParameter("done", done);
             tasks = query.getResultList();
             session.getTransaction().commit();
         } catch (Exception e) {

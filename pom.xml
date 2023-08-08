@@ -125,8 +125,6 @@
                             <version>1.5.5.Final</version>
                         </path>
                     </annotationProcessorPaths>
-                    <source>11</source>
-                    <target>11</target>
                 </configuration>
             </plugin>
         </plugins>

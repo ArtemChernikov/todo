@@ -258,7 +258,7 @@ class TaskRepositoryImplTest {
         taskRepository.create(task3);
         List<Task> expectedTasks = List.of(task1, task2);
 
-        List<Task> actualTasks = taskRepository.findAllCompletedTasks();
+        List<Task> actualTasks = taskRepository.findTasksByDone(true);
 
         assertTaskList(actualTasks, expectedTasks);
     }
@@ -288,7 +288,7 @@ class TaskRepositoryImplTest {
         taskRepository.create(task3);
         List<Task> expectedTasks = List.of(task1, task2);
 
-        List<Task> actualTasks = taskRepository.findNewTasks();
+        List<Task> actualTasks = taskRepository.findTasksByDone(false);
 
         assertTaskList(actualTasks, expectedTasks);
     }
