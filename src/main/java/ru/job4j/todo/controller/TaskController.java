@@ -25,7 +25,6 @@ import java.util.Optional;
 @RequestMapping("/tasks")
 public class TaskController {
 
-
     private final TaskService taskService;
 
     @GetMapping
