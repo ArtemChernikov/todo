@@ -24,6 +24,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Task {
+
     @EqualsAndHashCode.Include
     @Id
     @Column(nullable = false)

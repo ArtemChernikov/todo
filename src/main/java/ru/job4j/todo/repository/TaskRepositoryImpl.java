@@ -1,6 +1,7 @@
 package ru.job4j.todo.repository;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -16,6 +17,7 @@ import java.util.Optional;
  * @version 1.0
  * @since 19.06.2023
  */
+@Slf4j
 @AllArgsConstructor
 @Repository
 public class TaskRepositoryImpl implements TaskRepository {
@@ -33,6 +35,7 @@ public class TaskRepositoryImpl implements TaskRepository {
             session.getTransaction().commit();
             savedTask = Optional.of(task);
         } catch (Exception e) {
+            log.error(e.getMessage());
             session.getTransaction().rollback();
         } finally {
             session.close();
@@ -51,6 +54,7 @@ public class TaskRepositoryImpl implements TaskRepository {
             session.getTransaction().commit();
             return true;
         } catch (Exception e) {
+            log.error(e.getMessage());
             session.getTransaction().rollback();
         } finally {
             session.close();
@@ -71,6 +75,7 @@ public class TaskRepositoryImpl implements TaskRepository {
             session.getTransaction().commit();
             isDeleted = effectedRows > 0;
         } catch (Exception e) {
+            log.error(e.getMessage());
             session.getTransaction().rollback();
         } finally {
             session.close();
@@ -88,6 +93,7 @@ public class TaskRepositoryImpl implements TaskRepository {
                     .executeUpdate();
             session.getTransaction().commit();
         } catch (Exception e) {
+            log.error(e.getMessage());
             session.getTransaction().rollback();
         } finally {
             session.close();
@@ -106,6 +112,7 @@ public class TaskRepositoryImpl implements TaskRepository {
             session.getTransaction().commit();
             return true;
         } catch (Exception e) {
+            log.error(e.getMessage());
             session.getTransaction().rollback();
         } finally {
             session.close();
@@ -125,6 +132,7 @@ public class TaskRepositoryImpl implements TaskRepository {
             task = query.uniqueResultOptional();
             session.getTransaction().commit();
         } catch (Exception e) {
+            log.error(e.getMessage());
             session.getTransaction().rollback();
         } finally {
             session.close();
@@ -143,6 +151,7 @@ public class TaskRepositoryImpl implements TaskRepository {
             tasks = query.getResultList();
             session.getTransaction().commit();
         } catch (Exception e) {
+            log.error(e.getMessage());
             session.getTransaction().rollback();
         } finally {
             session.close();
@@ -162,6 +171,7 @@ public class TaskRepositoryImpl implements TaskRepository {
             tasks = query.getResultList();
             session.getTransaction().commit();
         } catch (Exception e) {
+            log.error(e.getMessage());
             session.getTransaction().rollback();
         } finally {
             session.close();
