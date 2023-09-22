@@ -46,6 +46,9 @@
                 <input type="text" class="form-control" id="name" name="name" placeholder="Иван" required>
             </div>
             <div class="mb-3">
+                <div class="mb-3" th:if="${error}">
+                    <p class="text-danger" th:text="${error}"></p>
+                </div>
                 <label for="login" class="form-label"><b>Логин</b></label>
                 <input type="text" class="form-control" id="login" name="login" placeholder="myLogin" required>
             </div>
