@@ -31,8 +31,9 @@ class TaskRepositoryImplTest {
     public static void init() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
         SessionFactory sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+        CrudRepository crudRepository = new CrudRepository(sessionFactory);
 
-        taskRepository = new TaskRepositoryImpl(sessionFactory);
+        taskRepository = new TaskRepositoryImpl(crudRepository);
     }
 
     @AfterEach

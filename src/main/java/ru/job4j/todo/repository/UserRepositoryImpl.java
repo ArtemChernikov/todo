@@ -2,12 +2,10 @@ package ru.job4j.todo.repository;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.entity.User;
 
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -19,48 +17,22 @@ import java.util.Optional;
 @AllArgsConstructor
 @Repository
 public class UserRepositoryImpl implements UserRepository {
-
-    private final SessionFactory sessionFactory;
+    private final CrudRepository crudRepository;
 
     @Override
     public Optional<User> create(User user) {
-        Session session = sessionFactory.openSession();
-        Optional<User> savedUser = Optional.empty();
-
         try {
-            session.beginTransaction();
-            session.save(user);
-            session.getTransaction().commit();
-            savedUser = Optional.of(user);
+            crudRepository.run(session -> session.persist(user));
+            return Optional.of(user);
         } catch (Exception e) {
             log.error(e.getMessage());
-            session.getTransaction().rollback();
-        } finally {
-            session.close();
         }
-
-        return savedUser;
+        return Optional.empty();
     }
 
     @Override
     public Optional<User> findByLoginAndPassword(String login, String password) {
-        Session session = sessionFactory.openSession();
-        Optional<User> user = Optional.empty();
-
-        try {
-            session.beginTransaction();
-            Query<User> query = session.createQuery("FROM User WHERE login = :login and password = :password", User.class);
-            query.setParameter("login", login);
-            query.setParameter("password", password);
-            user = query.uniqueResultOptional();
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            session.getTransaction().rollback();
-        } finally {
-            session.close();
-        }
-
-        return user;
+        return crudRepository.optional("FROM User WHERE login = :login and password = :password", User.class,
+                Map.of("login", login, "password", password));
     }
 }
