@@ -12,7 +12,8 @@ import java.util.Optional;
 public interface UserRepository {
 
     Optional<User> create(User user);
-
     Optional<User> findByLoginAndPassword(String login, String password);
+    Optional<User> findByLogin(String login);
+    void deleteAll();
 
 }

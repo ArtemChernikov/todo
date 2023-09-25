@@ -1,16 +1,15 @@
 package ru.job4j.todo.service;
 
 import ru.job4j.todo.model.dto.TaskDto;
-import ru.job4j.todo.model.entity.Task;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface TaskService {
 
-    Optional<TaskDto> save(Task task);
+    Optional<TaskDto> save(TaskDto taskDto);
 
-    boolean update(Task newTask);
+    boolean update(TaskDto newTaskDto);
 
     boolean deleteById(Integer taskId);
 

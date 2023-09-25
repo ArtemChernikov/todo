@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.job4j.todo.model.dto.TaskDto;
 import ru.job4j.todo.model.entity.Task;
+import ru.job4j.todo.model.entity.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,40 +24,33 @@ class TaskMapperTest {
 
     @Test
     public void whenTaskToTaskDto() {
-        Task task = new Task(1, "name", "desc", LocalDateTime.now(), true);
+        User user = new User(1, "name", "login", "password");
+        Task task = new Task(1, user, "name", "desc", LocalDateTime.now(), true);
 
         TaskDto taskDto = mapper.taskToTaskDto(task);
 
-        assertThat(taskDto).usingRecursiveComparison().isEqualTo(task);
+        assertThat(taskDto).usingRecursiveComparison().ignoringFields("userLogin", "user").isEqualTo(task);
     }
 
     @Test
     public void whenTaskDtoToTask() {
-        TaskDto taskDto = new TaskDto(1, "name", "desc", LocalDateTime.now(), true);
+        User user = new User(1, "name", "login", "password");
+        TaskDto taskDto = new TaskDto(1, "login", "name", "desc", LocalDateTime.now(), true);
 
-        Task task = mapper.taskDtoToTask(taskDto);
+        Task task = mapper.taskDtoToTask(taskDto, user);
 
-        assertThat(task).usingRecursiveComparison().isEqualTo(taskDto);
+        assertThat(task).usingRecursiveComparison().ignoringFields("userLogin", "user").isEqualTo(taskDto);
     }
 
     @Test
     public void whenTaskListToTaskDtoList() {
-        List<Task> taskList = List.of(new Task(1, "name", "desc", LocalDateTime.now(), true),
-                new Task(1, "name", "desc", LocalDateTime.now(), true));
+        User user = new User(1, "name", "login", "password");
+        List<Task> taskList = List.of(new Task(1, user, "name", "desc", LocalDateTime.now(), true),
+                new Task(1, user, "name", "desc", LocalDateTime.now(), true));
 
         List<TaskDto> taskDtoList = mapper.taskListToTaskDtoList(taskList);
 
-        assertThat(taskList).usingRecursiveComparison().isEqualTo(taskDtoList);
-    }
-
-    @Test
-    public void whenTaskDtoListToTaskList() {
-        List<TaskDto> taskDtoList = List.of(new TaskDto(1, "name", "desc", LocalDateTime.now(), true),
-                new TaskDto(1, "name", "desc", LocalDateTime.now(), true));
-
-        List<Task> taskList = mapper.taskDtoListToTaskList(taskDtoList);
-
-        assertThat(taskDtoList).usingRecursiveComparison().isEqualTo(taskList);
+        assertThat(taskList).usingRecursiveComparison().ignoringFields("userLogin", "user").isEqualTo(taskDtoList);
     }
 
 }

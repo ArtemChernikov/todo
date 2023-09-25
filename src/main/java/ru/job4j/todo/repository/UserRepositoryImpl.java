@@ -35,4 +35,14 @@ public class UserRepositoryImpl implements UserRepository {
         return crudRepository.optional("FROM User WHERE login = :login and password = :password", User.class,
                 Map.of("login", login, "password", password));
     }
+
+    @Override
+    public Optional<User> findByLogin(String login) {
+        return crudRepository.optional("FROM User WHERE login = :login", User.class, Map.of("login", login));
+    }
+
+    @Override
+    public void deleteAll() {
+        crudRepository.run("DELETE FROM User");
+    }
 }

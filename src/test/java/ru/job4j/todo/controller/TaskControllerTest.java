@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.Model;
 import ru.job4j.todo.model.dto.TaskDto;
-import ru.job4j.todo.model.entity.Task;
 import ru.job4j.todo.service.TaskService;
 
 import java.time.LocalDateTime;
@@ -28,8 +27,8 @@ class TaskControllerTest {
 
     @Test
     void whenGetTasks() {
-        TaskDto task1 = new TaskDto(1, "name1", "desc1", LocalDateTime.now(), true);
-        TaskDto task2 = new TaskDto(1, "name2", "desc2", LocalDateTime.now(), true);
+        TaskDto task1 = new TaskDto(1, "login", "name1", "desc1", LocalDateTime.now(), true);
+        TaskDto task2 = new TaskDto(1, "login", "name2", "desc2", LocalDateTime.now(), true);
         List<TaskDto> taskDtoList = List.of(task1, task2);
         when(taskService.getAll()).thenReturn(taskDtoList);
 
@@ -50,8 +49,8 @@ class TaskControllerTest {
 
     @Test
     void whenGetCompletedTasks() {
-        TaskDto task1 = new TaskDto(1, "name1", "desc1", LocalDateTime.now(), true);
-        TaskDto task2 = new TaskDto(1, "name2", "desc2", LocalDateTime.now(), true);
+        TaskDto task1 = new TaskDto(1, "login", "name1", "desc1", LocalDateTime.now(), true);
+        TaskDto task2 = new TaskDto(1, "login", "name2", "desc2", LocalDateTime.now(), true);
         List<TaskDto> taskDtoList = List.of(task1, task2);
         when(taskService.getAllCompletedTasks()).thenReturn(taskDtoList);
 
@@ -65,8 +64,8 @@ class TaskControllerTest {
 
     @Test
     void whenGetNewTasks() {
-        TaskDto task1 = new TaskDto(1, "name1", "desc1", LocalDateTime.now(), false);
-        TaskDto task2 = new TaskDto(1, "name2", "desc2", LocalDateTime.now(), false);
+        TaskDto task1 = new TaskDto(1, "login", "name1", "desc1", LocalDateTime.now(), false);
+        TaskDto task2 = new TaskDto(1, "login", "name2", "desc2", LocalDateTime.now(), false);
         List<TaskDto> taskDtoList = List.of(task1, task2);
         when(taskService.getNewTasks()).thenReturn(taskDtoList);
 
@@ -81,7 +80,7 @@ class TaskControllerTest {
     @Test
     void whenGetTaskByIdIsSuccess() {
         Integer taskId = 1;
-        TaskDto task1 = new TaskDto(taskId, "name1", "desc1", LocalDateTime.now(), false);
+        TaskDto task1 = new TaskDto(taskId, "login", "name1", "desc1", LocalDateTime.now(), false);
         when(taskService.getById(taskId)).thenReturn(Optional.of(task1));
 
         Model model = new ConcurrentModel();
@@ -159,7 +158,7 @@ class TaskControllerTest {
     @Test
     void whenGetUpdatePageIsSuccess() {
         Integer taskId = 1;
-        TaskDto task1 = new TaskDto(taskId, "name1", "desc1", LocalDateTime.now(), false);
+        TaskDto task1 = new TaskDto(taskId, "login", "name1", "desc1", LocalDateTime.now(), false);
         when(taskService.getById(taskId)).thenReturn(Optional.of(task1));
 
         Model model = new ConcurrentModel();
@@ -187,7 +186,7 @@ class TaskControllerTest {
     @Test
     void whenUpdateIsSuccess() {
         Integer taskId = 1;
-        Task task1 = new Task(taskId, "name1", "desc1", LocalDateTime.now(), false);
+        TaskDto task1 = new TaskDto(taskId, "login", "name1", "desc1", LocalDateTime.now(), false);
         when(taskService.update(task1)).thenReturn(true);
 
         Model model = new ConcurrentModel();
@@ -198,7 +197,7 @@ class TaskControllerTest {
 
     @Test
     void whenUpdateIsNotSuccess() {
-        Task task1 = new Task(999, "name1", "desc1", LocalDateTime.now(), false);
+        TaskDto task1 = new TaskDto(999, "login", "name1", "desc1", LocalDateTime.now(), false);
         String expectedMessage = "Задача с указанным идентификатором не найдена";
         when(taskService.update(task1)).thenReturn(false);
 

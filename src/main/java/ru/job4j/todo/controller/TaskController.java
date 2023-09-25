@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.job4j.todo.model.dto.TaskDto;
-import ru.job4j.todo.model.entity.Task;
 import ru.job4j.todo.service.TaskService;
 
 import java.util.List;
@@ -40,8 +39,8 @@ public class TaskController {
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute Task task) {
-        taskService.save(task);
+    public String create(@ModelAttribute TaskDto taskDto) {
+        taskService.save(taskDto);
         return "redirect:/tasks";
     }
 
@@ -102,8 +101,8 @@ public class TaskController {
     }
 
     @PostMapping("/update/{id}")
-    public String update(@ModelAttribute Task task, Model model) {
-        var isUpdate = taskService.update(task);
+    public String update(@ModelAttribute TaskDto taskDto, Model model) {
+        var isUpdate = taskService.update(taskDto);
         if (!isUpdate) {
             model.addAttribute("message", "Задача с указанным идентификатором не найдена");
             return "errors/404";
