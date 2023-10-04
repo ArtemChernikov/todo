@@ -35,10 +35,10 @@ public class TaskRepositoryImpl implements TaskRepository {
     public boolean update(Task newTask) {
         return crudRepository.bool("""
                         UPDATE FROM Task SET name = :name, description = :description, created = :created,
-                        done = :done, user_id = :userId WHERE id = :id
+                        done = :done, user_id = :userId, priority_id = :priorityId WHERE id = :id
                         """,
                 Map.of("name", newTask.getName(), "description", newTask.getDescription(), "created", newTask.getCreated(),
-                        "done", newTask.isDone(), "userId",  newTask.getUser().getId(), "id", newTask.getId()));
+                        "done", newTask.isDone(), "userId", newTask.getUser().getId(), "priorityId", newTask.getPriority().getId(), "id", newTask.getId()));
     }
 
     @Override
@@ -58,17 +58,17 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public Optional<Task> findById(Integer taskId) {
-        return crudRepository.optional("FROM Task WHERE id = :id", Task.class, Map.of("id", taskId));
+        return crudRepository.optional("FROM Task f JOIN FETCH f.priority WHERE f.id = :id", Task.class, Map.of("id", taskId));
     }
 
     @Override
     public List<Task> findAll() {
-        return crudRepository.list("FROM Task", Task.class);
+        return crudRepository.list("FROM Task f JOIN FETCH f.priority", Task.class);
     }
 
     @Override
     public List<Task> findTasksByDone(boolean done) {
-        return crudRepository.list("FROM Task WHERE done = :done", Task.class, Map.of("done", done));
+        return crudRepository.list("FROM Task f JOIN FETCH f.priority WHERE done = :done", Task.class, Map.of("done", done));
     }
 
 }

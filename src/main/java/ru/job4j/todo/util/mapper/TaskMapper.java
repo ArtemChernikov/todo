@@ -3,6 +3,7 @@ package ru.job4j.todo.util.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.job4j.todo.model.dto.TaskDto;
+import ru.job4j.todo.model.entity.Priority;
 import ru.job4j.todo.model.entity.Task;
 import ru.job4j.todo.model.entity.User;
 
@@ -17,6 +18,7 @@ public interface TaskMapper {
     @Mapping(target = "description", source = "description")
     @Mapping(target = "created", source = "created")
     @Mapping(target = "done", source = "done")
+    @Mapping(target = "priorityName", source = "task.priority.name")
     TaskDto taskToTaskDto(Task task);
 
     @Mapping(target = "id", source = "taskDto.id")
@@ -25,7 +27,8 @@ public interface TaskMapper {
     @Mapping(target = "description", source = "taskDto.description")
     @Mapping(target = "created", source = "taskDto.created")
     @Mapping(target = "done", source = "taskDto.done")
-    Task taskDtoToTask(TaskDto taskDto, User user);
+    @Mapping(target = "priority", source = "priority")
+    Task taskDtoToTask(TaskDto taskDto, User user, Priority priority);
 
     List<TaskDto> taskListToTaskDtoList(List<Task> taskList);
 }

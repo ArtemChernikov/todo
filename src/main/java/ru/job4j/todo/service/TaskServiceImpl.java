@@ -3,8 +3,10 @@ package ru.job4j.todo.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.job4j.todo.model.dto.TaskDto;
+import ru.job4j.todo.model.entity.Priority;
 import ru.job4j.todo.model.entity.Task;
 import ru.job4j.todo.model.entity.User;
+import ru.job4j.todo.repository.PriorityRepository;
 import ru.job4j.todo.repository.TaskRepository;
 import ru.job4j.todo.repository.UserRepository;
 import ru.job4j.todo.util.mapper.TaskMapper;
@@ -23,13 +25,15 @@ public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
+    private final PriorityRepository priorityRepository;
 
     private final TaskMapper mapper;
 
     @Override
     public Optional<TaskDto> save(TaskDto taskDto) {
         User user = getUserByLogin(taskDto.getUserLogin());
-        Task task = mapper.taskDtoToTask(taskDto, user);
+        Priority priority = getPriorityByName(taskDto.getPriorityName());
+        Task task = mapper.taskDtoToTask(taskDto, user, priority);
         Optional<Task> createdTask = taskRepository.create(task);
 
         if (createdTask.isPresent()) {
@@ -41,9 +45,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public boolean update(TaskDto newTaskDto) {
-        System.out.println(newTaskDto.getUserLogin());
         User user = getUserByLogin(newTaskDto.getUserLogin());
-        Task task = mapper.taskDtoToTask(newTaskDto, user);
+        Priority priority = getPriorityByName(newTaskDto.getPriorityName());
+        Task task = mapper.taskDtoToTask(newTaskDto, user, priority);
         return taskRepository.update(task);
     }
 
@@ -95,6 +99,11 @@ public class TaskServiceImpl implements TaskService {
     private User getUserByLogin(String userLogin) {
         Optional<User> optionalUser = userRepository.findByLogin(userLogin);
         return optionalUser.orElseThrow();
+    }
+
+    private Priority getPriorityByName(String name) {
+        Optional<Priority> optionalPriority = priorityRepository.findByName(name);
+        return optionalPriority.orElseThrow();
     }
 
 }

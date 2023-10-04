@@ -9,6 +9,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.job4j.todo.model.entity.Priority;
 import ru.job4j.todo.model.entity.Task;
 import ru.job4j.todo.model.entity.User;
 
@@ -24,7 +25,9 @@ class TaskRepositoryImplTest {
 
     private static TaskRepository taskRepository;
     private static UserRepository userRepository;
+    private static PriorityRepository priorityRepository;
     private User user;
+    private Priority priority;
 
     private final RecursiveComparisonConfiguration recursiveComparisonConfiguration =
             RecursiveComparisonConfiguration.builder()
@@ -39,6 +42,7 @@ class TaskRepositoryImplTest {
 
         taskRepository = new TaskRepositoryImpl(crudRepository);
         userRepository = new UserRepositoryImpl(crudRepository);
+        priorityRepository = new PriorityRepositoryImpl(crudRepository);
     }
 
     @BeforeEach
@@ -48,12 +52,18 @@ class TaskRepositoryImplTest {
                 .password("password")
                 .name("name")
                 .build();
+        priority = Priority.builder()
+                .name("urgently")
+                .position(1)
+                .build();
         userRepository.create(user);
+        priorityRepository.create(priority);
     }
 
     @AfterEach
     public void deleteTasks() {
         taskRepository.deleteAll();
+        priorityRepository.deleteAll();
         userRepository.deleteAll();
     }
 
@@ -64,7 +74,9 @@ class TaskRepositoryImplTest {
                 .name("actual name")
                 .description("actual description")
                 .created(LocalDateTime.now())
+                .priority(priority)
                 .build();
+        System.out.println(user.getId());
         Optional<Task> expectedTask = taskRepository.create(savedTask);
         Integer expectedTaskId = savedTask.getId();
 
@@ -83,6 +95,7 @@ class TaskRepositoryImplTest {
         Task oldTask = Task.builder()
                 .user(user)
                 .name("old name")
+                .priority(priority)
                 .description("old description")
                 .created(LocalDateTime.now())
                 .build();
@@ -91,6 +104,7 @@ class TaskRepositoryImplTest {
         Task taskForUpdate = Task.builder()
                 .id(taskId)
                 .user(user)
+                .priority(priority)
                 .name(nameForUpdate)
                 .description(descriptionForUpdate)
                 .created(createdForUpdate)
@@ -110,6 +124,7 @@ class TaskRepositoryImplTest {
         LocalDateTime createdForUpdate = LocalDateTime.now().plusDays(2);
         Task oldTask = Task.builder()
                 .user(user)
+                .priority(priority)
                 .description("old description")
                 .created(LocalDateTime.now())
                 .build();
@@ -118,6 +133,7 @@ class TaskRepositoryImplTest {
         Task taskForUpdate = Task.builder()
                 .id(notValidTaskId)
                 .user(user)
+                .priority(priority)
                 .name(nameForUpdate)
                 .description(descriptionForUpdate)
                 .created(createdForUpdate)
@@ -133,6 +149,7 @@ class TaskRepositoryImplTest {
         Task taskForDelete = Task.builder()
                 .name("actual name")
                 .user(user)
+                .priority(priority)
                 .description("actual description")
                 .created(LocalDateTime.now())
                 .build();
@@ -151,6 +168,7 @@ class TaskRepositoryImplTest {
         Task taskForDelete = Task.builder()
                 .name("actual name")
                 .user(user)
+                .priority(priority)
                 .description("actual description")
                 .created(LocalDateTime.now())
                 .build();
@@ -169,6 +187,7 @@ class TaskRepositoryImplTest {
         Task task = Task.builder()
                 .name("name")
                 .user(user)
+                .priority(priority)
                 .description("desc")
                 .created(LocalDateTime.now())
                 .done(false)
@@ -188,12 +207,14 @@ class TaskRepositoryImplTest {
         Task task1 = Task.builder()
                 .name("name1")
                 .user(user)
+                .priority(priority)
                 .description("description1")
                 .created(LocalDateTime.now())
                 .build();
         Task task2 = Task.builder()
                 .name("name2")
                 .user(user)
+                .priority(priority)
                 .description("description2")
                 .created(LocalDateTime.now())
                 .build();
@@ -215,6 +236,7 @@ class TaskRepositoryImplTest {
         Task expectedTask = Task.builder()
                 .name("actual name")
                 .user(user)
+                .priority(priority)
                 .description("actual description")
                 .created(LocalDateTime.now())
                 .build();
@@ -230,6 +252,7 @@ class TaskRepositoryImplTest {
     public void whenFindByInvalidId() {
         Task expectedTask = Task.builder()
                 .user(user)
+                .priority(priority)
                 .description("actual description")
                 .created(LocalDateTime.now())
                 .build();
@@ -246,12 +269,14 @@ class TaskRepositoryImplTest {
         Task task1 = Task.builder()
                 .name("name1")
                 .user(user)
+                .priority(priority)
                 .description("description1")
                 .created(LocalDateTime.now())
                 .build();
         Task task2 = Task.builder()
                 .name("name2")
                 .user(user)
+                .priority(priority)
                 .description("description2")
                 .created(LocalDateTime.now())
                 .build();
@@ -269,6 +294,7 @@ class TaskRepositoryImplTest {
         Task task1 = Task.builder()
                 .name("name1")
                 .user(user)
+                .priority(priority)
                 .description("description1")
                 .created(LocalDateTime.now())
                 .done(true)
@@ -276,6 +302,7 @@ class TaskRepositoryImplTest {
         Task task2 = Task.builder()
                 .name("name2")
                 .user(user)
+                .priority(priority)
                 .description("description2")
                 .created(LocalDateTime.now())
                 .done(true)
@@ -283,6 +310,7 @@ class TaskRepositoryImplTest {
         Task task3 = Task.builder()
                 .name("name3")
                 .user(user)
+                .priority(priority)
                 .description("description2")
                 .created(LocalDateTime.now())
                 .done(false)
@@ -302,6 +330,7 @@ class TaskRepositoryImplTest {
         Task task1 = Task.builder()
                 .name("name1")
                 .user(user)
+                .priority(priority)
                 .description("description1")
                 .created(LocalDateTime.now().minusHours(10))
                 .done(false)
@@ -309,6 +338,7 @@ class TaskRepositoryImplTest {
         Task task2 = Task.builder()
                 .name("name2")
                 .user(user)
+                .priority(priority)
                 .description("description2")
                 .created(LocalDateTime.now())
                 .done(false)
@@ -316,6 +346,7 @@ class TaskRepositoryImplTest {
         Task task3 = Task.builder()
                 .name("name3")
                 .user(user)
+                .priority(priority)
                 .description("description2")
                 .created(LocalDateTime.now().minusDays(1))
                 .done(true)

@@ -50,6 +50,7 @@
                     <th>№</th>
                     <th>Название</th>
                     <th>Создатель</th>
+                    <th>Приоритет</th>
                     <th>Дата создания</th>
                     <th>Состояние</th>
                 </tr>
@@ -60,6 +61,7 @@
                     <td><a th:text="${task.name}"
                            th:href="@{/tasks/{taskId}(taskId=${task.id})}"></a></td>
                     <td th:text="${task.userLogin}"/>
+                    <td th:text="${task.priorityName}"/>
                     <td th:text="${#temporals.format(task.created, 'd MMMM HH:mm')}"/>
                     <td>
                         <span th:text="${task.done ? 'Выполнено' : 'Выполняется'}"

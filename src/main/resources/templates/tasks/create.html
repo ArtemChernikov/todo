@@ -57,6 +57,13 @@
                 <textarea class="form-control" id="description" name="description" rows="25"
                           placeholder="Нужно сделать..."></textarea>
             </div>
+            <div class="mb-3">
+                <label for="priorityName"><b>Приориет</b></label>
+                <select class="form-control" id="priorityName" name="priorityName">
+                    <option th:each="priority : ${priorities}" th:value="${priority.name}"
+                            th:text="${priority.name}"></option>
+                </select>
+            </div>
             <div class="mb-3 row">
                 <div class="col-6"></div>
                 <div class="col-6">

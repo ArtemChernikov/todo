@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.job4j.todo.model.dto.TaskDto;
+import ru.job4j.todo.model.entity.Priority;
+import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 
 import java.util.List;
@@ -25,6 +27,7 @@ import java.util.Optional;
 public class TaskController {
 
     private final TaskService taskService;
+    private final PriorityService priorityService;
 
     @GetMapping
     public String getTasks(Model model) {
@@ -34,7 +37,9 @@ public class TaskController {
     }
 
     @GetMapping("/create")
-    public String getCreationPage() {
+    public String getCreationPage(Model model) {
+        List<Priority> priorities = priorityService.findAll();
+        model.addAttribute("priorities", priorities);
         return "tasks/create";
     }
 
@@ -96,7 +101,9 @@ public class TaskController {
             model.addAttribute("message", "Задача с указанным идентификатором не найдена");
             return "errors/404";
         }
+        List<Priority> priorities = priorityService.findAll();
         model.addAttribute("task", optionalTaskDto.get());
+        model.addAttribute("priorities", priorities);
         return "tasks/update";
     }
 

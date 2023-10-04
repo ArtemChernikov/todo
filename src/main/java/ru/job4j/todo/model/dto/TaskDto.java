@@ -22,5 +22,6 @@ public class TaskDto {
     private String description;
     private LocalDateTime created = LocalDateTime.now();
     private boolean done = false;
+    private String priorityName;
 
 }
