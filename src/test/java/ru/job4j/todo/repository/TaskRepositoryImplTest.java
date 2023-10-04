@@ -100,9 +100,8 @@ class TaskRepositoryImplTest {
                 .created(LocalDateTime.now())
                 .build();
         taskRepository.create(oldTask);
-        Integer taskId = oldTask.getId();
         Task taskForUpdate = Task.builder()
-                .id(taskId)
+                .id(oldTask.getId())
                 .user(user)
                 .priority(priority)
                 .name(nameForUpdate)
@@ -111,7 +110,7 @@ class TaskRepositoryImplTest {
                 .build();
 
         boolean isUpdated = taskRepository.update(taskForUpdate);
-        Task actualTask = taskRepository.findById(taskId).get();
+        Task actualTask = taskRepository.findById(oldTask.getId()).get();
 
         assertThat(isUpdated).isTrue();
         assertThat(actualTask).usingRecursiveComparison(recursiveComparisonConfiguration).isEqualTo(taskForUpdate);
