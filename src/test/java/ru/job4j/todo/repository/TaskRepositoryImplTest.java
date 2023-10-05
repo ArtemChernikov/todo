@@ -87,6 +87,36 @@ class TaskRepositoryImplTest {
     }
 
     @Test
+    public void whenUpdateTaskIsSuccessByValidId() {
+        String nameForUpdate = "new name";
+        String descriptionForUpdate = "new description";
+        LocalDateTime createdForUpdate = LocalDateTime.now().plusDays(2);
+        Task oldTask = Task.builder()
+                .user(user)
+                .name("old name")
+                .priority(priority)
+                .description("old description")
+                .created(LocalDateTime.now())
+                .build();
+        taskRepository.create(oldTask);
+        Integer taskId = oldTask.getId();
+        Task taskForUpdate = Task.builder()
+                .id(taskId)
+                .user(user)
+                .priority(priority)
+                .name(nameForUpdate)
+                .description(descriptionForUpdate)
+                .created(createdForUpdate)
+                .build();
+
+        boolean isUpdated = taskRepository.update(taskForUpdate);
+        Task actualTask = taskRepository.findById(taskId).get();
+
+        assertThat(isUpdated).isTrue();
+        assertThat(actualTask).usingRecursiveComparison(recursiveComparisonConfiguration).isEqualTo(taskForUpdate);
+    }
+
+    @Test
     public void whenUpdateTaskIsNotSuccessByInvalidId() {
         String nameForUpdate = "new name";
         String descriptionForUpdate = "new description";
