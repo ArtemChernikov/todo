@@ -98,9 +98,8 @@ class TaskRepositoryImplTest {
                 .description("old description")
                 .created(LocalDateTime.now())
                 .build();
-        Thread.sleep(5000);
-        taskRepository.create(oldTask);
-        Integer taskId = oldTask.getId();
+        Optional<Task> task = taskRepository.create(oldTask);
+        Integer taskId = task.get().getId();
         Task taskForUpdate = Task.builder()
                 .id(taskId)
                 .user(user)
