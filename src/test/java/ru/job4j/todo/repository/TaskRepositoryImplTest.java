@@ -87,7 +87,7 @@ class TaskRepositoryImplTest {
     }
 
     @Test
-    public void whenUpdateTaskIsSuccessByValidId() {
+    public void whenUpdateTaskIsSuccessByValidId() throws InterruptedException {
         String nameForUpdate = "new name";
         String descriptionForUpdate = "new description";
         LocalDateTime createdForUpdate = LocalDateTime.now().plusDays(2);
@@ -98,6 +98,7 @@ class TaskRepositoryImplTest {
                 .description("old description")
                 .created(LocalDateTime.now())
                 .build();
+        Thread.sleep(5000);
         taskRepository.create(oldTask);
         Integer taskId = oldTask.getId();
         Task taskForUpdate = Task.builder()
