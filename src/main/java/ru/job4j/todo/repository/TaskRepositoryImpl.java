@@ -33,12 +33,13 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public boolean update(Task newTask) {
-        return crudRepository.bool("""
-                        UPDATE FROM Task SET name = :name, description = :description, created = :created,
-                        done = :done, user_id = :userId, priority_id = :priorityId WHERE id = :id
-                        """,
-                Map.of("name", newTask.getName(), "description", newTask.getDescription(), "created", newTask.getCreated(),
-                        "done", newTask.isDone(), "userId", newTask.getUser().getId(), "priorityId", newTask.getPriority().getId(), "id", newTask.getId()));
+        try {
+            crudRepository.run(session -> session.update(newTask));
+            return true;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return false;
     }
 
     @Override
