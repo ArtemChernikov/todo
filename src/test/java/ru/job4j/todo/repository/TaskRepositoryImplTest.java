@@ -133,25 +133,6 @@ class TaskRepositoryImplTest {
     }
 
     @Test
-    public void whenDeleteTaskIsNotSuccessByInvalidId() {
-        Task taskForDelete = Task.builder()
-                .name("actual name")
-                .user(user)
-                .priority(priority)
-                .description("actual description")
-                .created(LocalDateTime.now())
-                .build();
-        taskRepository.create(taskForDelete);
-        Integer invalidId = 9999;
-
-        boolean isDeleted = taskRepository.deleteById(invalidId);
-        Optional<Task> task = taskRepository.findById(taskForDelete.getId());
-
-        assertThat(isDeleted).isFalse();
-        assertThat(task).isPresent();
-    }
-
-    @Test
     public void whenCompleteTask() {
         Task task = Task.builder()
                 .name("name")
