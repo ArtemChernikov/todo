@@ -88,6 +88,7 @@ class TaskRepositoryImplTest {
 
     @Test
     public void whenUpdateTaskIsSuccessByValidId() {
+        priorityRepository.create(priority);
         String nameForUpdate = "new name";
         String descriptionForUpdate = "new description";
         LocalDateTime createdForUpdate = LocalDateTime.now().plusDays(2);
