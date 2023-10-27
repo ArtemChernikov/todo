@@ -76,6 +76,15 @@ public class CrudRepository {
         return tx(command);
     }
 
+    public <T> List<T> list(String query, List<Integer> idList, Class<T> tClass) {
+        Function<Session, List<T>> command = session -> {
+            Query<T> sql = session.createQuery(query, tClass);
+            sql.setParameterList("idList", idList);
+            return sql.list();
+        };
+        return tx(command);
+    }
+
     private <T> T tx(Function<Session, T> command) {
         Session session = sessionFactory.openSession();
         Transaction transaction = null;

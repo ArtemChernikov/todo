@@ -59,17 +59,22 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public Optional<Task> findById(Integer taskId) {
-        return crudRepository.optional("FROM Task f JOIN FETCH f.priority WHERE f.id = :id", Task.class, Map.of("id", taskId));
+        return crudRepository
+                .optional("FROM Task f JOIN FETCH f.priority JOIN FETCH f.categories WHERE f.id = :id",
+                        Task.class, Map.of("id", taskId));
     }
 
     @Override
     public List<Task> findAll() {
-        return crudRepository.list("FROM Task f JOIN FETCH f.priority", Task.class);
+        return crudRepository
+                .list("SELECT DISTINCT f FROM Task f JOIN FETCH f.priority JOIN FETCH f.categories", Task.class);
     }
 
     @Override
     public List<Task> findTasksByDone(boolean done) {
-        return crudRepository.list("FROM Task f JOIN FETCH f.priority WHERE done = :done", Task.class, Map.of("done", done));
+        return crudRepository
+                .list("SELECT DISTINCT f FROM Task f JOIN FETCH f.priority JOIN FETCH f.categories WHERE done = :done",
+                        Task.class, Map.of("done", done));
     }
 
 }

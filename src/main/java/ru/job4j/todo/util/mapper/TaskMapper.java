@@ -8,18 +8,20 @@ import ru.job4j.todo.model.entity.Task;
 import ru.job4j.todo.model.entity.User;
 
 import java.util.List;
+import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface TaskMapper {
 
-    @Mapping(target = "id", source = "id")
+    @Mapping(target = "id", source = "task.id")
     @Mapping(target = "userLogin", source = "task.user.login")
-    @Mapping(target = "name", source = "name")
-    @Mapping(target = "description", source = "description")
-    @Mapping(target = "created", source = "created")
-    @Mapping(target = "done", source = "done")
+    @Mapping(target = "name", source = "task.name")
+    @Mapping(target = "description", source = "task.description")
+    @Mapping(target = "created", source = "task.created")
+    @Mapping(target = "done", source = "task.done")
     @Mapping(target = "priorityName", source = "task.priority.name")
-    TaskDto taskToTaskDto(Task task);
+    @Mapping(target = "categoryNames", source = "categoryNames")
+    TaskDto taskToTaskDto(Task task, Set<String> categoryNames);
 
     @Mapping(target = "id", source = "taskDto.id")
     @Mapping(target = "user", source = "user")

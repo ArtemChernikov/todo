@@ -5,13 +5,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.Model;
 import ru.job4j.todo.model.dto.TaskDto;
+import ru.job4j.todo.model.entity.Category;
 import ru.job4j.todo.model.entity.Priority;
+import ru.job4j.todo.service.CategoryService;
 import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
@@ -21,18 +24,23 @@ class TaskControllerTest {
     private TaskController taskController;
     private TaskService taskService;
     private PriorityService priorityService;
+    private CategoryService categoryService;
 
     @BeforeEach
     public void init() {
         taskService = mock(TaskService.class);
         priorityService = mock(PriorityService.class);
-        taskController = new TaskController(taskService, priorityService);
+        categoryService = mock(CategoryService.class);
+        taskController = new TaskController(taskService, priorityService, categoryService);
     }
 
     @Test
     void whenGetTasks() {
-        TaskDto task1 = new TaskDto(1, "login", "name1", "desc1", LocalDateTime.now(), true, "urgently");
-        TaskDto task2 = new TaskDto(1, "login", "name2", "desc2", LocalDateTime.now(), true, "urgently");
+        Category category = new Category(1, "Работа");
+        TaskDto task1 = new TaskDto(1, "login", "name1", "desc1", LocalDateTime.now(),
+                true, "urgently", Set.of(category.getName()));
+        TaskDto task2 = new TaskDto(1, "login", "name2", "desc2", LocalDateTime.now(),
+                true, "urgently", Set.of(category.getName()));
         List<TaskDto> taskDtoList = List.of(task1, task2);
         when(taskService.getAll()).thenReturn(taskDtoList);
 
@@ -59,8 +67,11 @@ class TaskControllerTest {
 
     @Test
     void whenGetCompletedTasks() {
-        TaskDto task1 = new TaskDto(1, "login", "name1", "desc1", LocalDateTime.now(), true, "urgently");
-        TaskDto task2 = new TaskDto(1, "login", "name2", "desc2", LocalDateTime.now(), true, "urgently");
+        Category category = new Category(1, "Работа");
+        TaskDto task1 = new TaskDto(1, "login", "name1", "desc1", LocalDateTime.now(),
+                true, "urgently", Set.of(category.getName()));
+        TaskDto task2 = new TaskDto(1, "login", "name2", "desc2", LocalDateTime.now(),
+                true, "urgently", Set.of(category.getName()));
         List<TaskDto> taskDtoList = List.of(task1, task2);
         when(taskService.getAllCompletedTasks()).thenReturn(taskDtoList);
 
@@ -74,8 +85,11 @@ class TaskControllerTest {
 
     @Test
     void whenGetNewTasks() {
-        TaskDto task1 = new TaskDto(1, "login", "name1", "desc1", LocalDateTime.now(), false, "urgently");
-        TaskDto task2 = new TaskDto(1, "login", "name2", "desc2", LocalDateTime.now(), false, "urgently");
+        Category category = new Category(1, "Работа");
+        TaskDto task1 = new TaskDto(1, "login", "name1", "desc1", LocalDateTime.now(),
+                false, "urgently", Set.of(category.getName()));
+        TaskDto task2 = new TaskDto(1, "login", "name2", "desc2", LocalDateTime.now(),
+                false, "urgently", Set.of(category.getName()));
         List<TaskDto> taskDtoList = List.of(task1, task2);
         when(taskService.getNewTasks()).thenReturn(taskDtoList);
 
@@ -90,7 +104,9 @@ class TaskControllerTest {
     @Test
     void whenGetTaskByIdIsSuccess() {
         Integer taskId = 1;
-        TaskDto task1 = new TaskDto(taskId, "login", "name1", "desc1", LocalDateTime.now(), false, "urgently");
+        Category category = new Category(1, "Работа");
+        TaskDto task1 = new TaskDto(taskId, "login", "name1", "desc1", LocalDateTime.now(),
+                false, "urgently", Set.of(category.getName()));
         when(taskService.getById(taskId)).thenReturn(Optional.of(task1));
 
         Model model = new ConcurrentModel();
@@ -168,7 +184,9 @@ class TaskControllerTest {
     @Test
     void whenGetUpdatePageIsSuccess() {
         Integer taskId = 1;
-        TaskDto task1 = new TaskDto(taskId, "login", "name1", "desc1", LocalDateTime.now(), false, "urgently");
+        Category category = new Category(1, "Работа");
+        TaskDto task1 = new TaskDto(taskId, "login", "name1", "desc1", LocalDateTime.now(),
+                false, "urgently", Set.of(category.getName()));
         when(taskService.getById(taskId)).thenReturn(Optional.of(task1));
 
         Model model = new ConcurrentModel();
@@ -196,23 +214,27 @@ class TaskControllerTest {
     @Test
     void whenUpdateIsSuccess() {
         Integer taskId = 1;
-        TaskDto task1 = new TaskDto(taskId, "login", "name1", "desc1", LocalDateTime.now(), false, "urgently");
-        when(taskService.update(task1)).thenReturn(true);
+        Category category = new Category(1, "Работа");
+        TaskDto task1 = new TaskDto(taskId, "login", "name1", "desc1", LocalDateTime.now(),
+                false, "urgently", Set.of(category.getName()));
+        when(taskService.update(any(), any())).thenReturn(true);
 
         Model model = new ConcurrentModel();
-        String view = taskController.update(task1, model);
+        String view = taskController.update(task1, model, List.of(1));
 
         assertThat(view).isEqualTo("redirect:/tasks");
     }
 
     @Test
     void whenUpdateIsNotSuccess() {
-        TaskDto task1 = new TaskDto(999, "login", "name1", "desc1", LocalDateTime.now(), false, "urgently");
+        Category category = new Category(1, "Работа");
+        TaskDto task1 = new TaskDto(999, "login", "name1", "desc1",
+                LocalDateTime.now(), false, "urgently", Set.of(category.getName()));
         String expectedMessage = "Задача с указанным идентификатором не найдена";
-        when(taskService.update(task1)).thenReturn(false);
+        when(taskService.update(any(), any())).thenReturn(false);
 
         Model model = new ConcurrentModel();
-        String view = taskController.update(task1, model);
+        String view = taskController.update(task1, model, List.of(1));
         Object actualMessage = model.getAttribute("message");
 
         assertThat(view).isEqualTo("errors/404");

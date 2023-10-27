@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Artem Chernikov
@@ -23,5 +25,6 @@ public class TaskDto {
     private LocalDateTime created = LocalDateTime.now();
     private boolean done = false;
     private String priorityName;
+    private Set<String> categoryNames = new HashSet<>();
 
 }

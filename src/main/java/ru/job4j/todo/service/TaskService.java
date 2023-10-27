@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public interface TaskService {
 
-    Optional<TaskDto> save(TaskDto taskDto);
+    Optional<TaskDto> save(TaskDto taskDto, List<Integer> categoriesIds);
 
-    boolean update(TaskDto newTaskDto);
+    boolean update(TaskDto newTaskDto, List<Integer> categoriesIds);
 
     boolean deleteById(Integer taskId);
 

@@ -3,13 +3,11 @@ package ru.job4j.todo.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.job4j.todo.model.dto.TaskDto;
+import ru.job4j.todo.model.entity.Category;
 import ru.job4j.todo.model.entity.Priority;
+import ru.job4j.todo.service.CategoryService;
 import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 
@@ -28,6 +26,7 @@ public class TaskController {
 
     private final TaskService taskService;
     private final PriorityService priorityService;
+    private final CategoryService categoryService;
 
     @GetMapping
     public String getTasks(Model model) {
@@ -39,13 +38,15 @@ public class TaskController {
     @GetMapping("/create")
     public String getCreationPage(Model model) {
         List<Priority> priorities = priorityService.findAll();
+        List<Category> categories = categoryService.findAll();
         model.addAttribute("priorities", priorities);
+        model.addAttribute("categories", categories);
         return "tasks/create";
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute TaskDto taskDto) {
-        taskService.save(taskDto);
+    public String create(@ModelAttribute TaskDto taskDto, @RequestParam("selectedCategories") List<Integer> categoriesIds) {
+        taskService.save(taskDto, categoriesIds);
         return "redirect:/tasks";
     }
 
@@ -108,8 +109,9 @@ public class TaskController {
     }
 
     @PostMapping("/update/{id}")
-    public String update(@ModelAttribute TaskDto taskDto, Model model) {
-        var isUpdate = taskService.update(taskDto);
+    public String update(@ModelAttribute TaskDto taskDto, Model model,
+                         @RequestParam("selectedCategories") List<Integer> categoriesIds) {
+        var isUpdate = taskService.update(taskDto, categoriesIds);
         if (!isUpdate) {
             model.addAttribute("message", "Задача с указанным идентификатором не найдена");
             return "errors/404";

@@ -58,6 +58,16 @@
                           placeholder="Нужно сделать..."></textarea>
             </div>
             <div class="mb-3">
+                <label for="selectedCategories"><b>Категории</b></label>
+                <select multiple class="form-control form control-sm" id="selectedCategories" name="selectedCategories"
+                        size="4" required>
+                    <option selected="selected" value="1">Работа</option>
+                    <option value="2">Дом</option>
+                    <option value="3">Семья</option>
+                    <option value="4">Покупки</option>
+                </select>
+            </div>
+            <div class="mb-3">
                 <label for="priorityName"><b>Приориет</b></label>
                 <select class="form-control" id="priorityName" name="priorityName">
                     <option th:each="priority : ${priorities}" th:value="${priority.name}"

@@ -1,7 +1,7 @@
 INSERT INTO priorities (name, position)
-VALUES ('urgently', 1);
+VALUES ('Высокий', 1);
 INSERT INTO priorities (name, position)
-VALUES ('normal', 2);
+VALUES ('Обычный', 2);
 
 UPDATE tasks
-SET priority_id = (SELECT id FROM priorities WHERE name = 'urgently');
+SET priority_id = (SELECT id FROM priorities WHERE name = 'Высокий');
