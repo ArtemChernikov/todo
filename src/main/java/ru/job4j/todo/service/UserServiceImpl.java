@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.job4j.todo.model.entity.User;
 import ru.job4j.todo.repository.UserRepository;
 
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Artem Chernikov
@@ -26,5 +26,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> getByLoginAndPassword(String login, String password) {
         return userRepository.findByLoginAndPassword(login, password);
+    }
+
+    @Override
+    public String getDefaultTimezone() {
+        return TimeZone.getDefault().getID();
+    }
+
+    @Override
+    public List<String> getTimezones() {
+        return Arrays.asList(TimeZone.getAvailableIDs());
     }
 }

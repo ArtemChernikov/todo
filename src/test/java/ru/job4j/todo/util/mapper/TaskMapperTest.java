@@ -12,11 +12,14 @@ import ru.job4j.todo.model.entity.User;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 class TaskMapperTest {
+
+    private static final String TIMEZONE = TimeZone.getDefault().getID();
 
     private final TaskMapper mapper;
 
@@ -27,7 +30,7 @@ class TaskMapperTest {
 
     @Test
     void whenTaskToTaskDto() {
-        User user = new User(1, "name", "login", "password");
+        User user = new User(1, "name", "login", "password", TIMEZONE);
         Priority priority = new Priority(1, "name", 1);
         Category category = new Category(1, "Работа");
         Task task = new Task(1, user, "name", "desc", LocalDateTime.now(), true, priority,
@@ -41,7 +44,7 @@ class TaskMapperTest {
 
     @Test
     void whenTaskDtoToTask() {
-        User user = new User(1, "name", "login", "password");
+        User user = new User(1, "name", "login", "password", TIMEZONE);
         Priority priority = new Priority(1, "name", 1);
         Category category = new Category(1, "Работа");
         TaskDto taskDto = new TaskDto(1, "login", "name", "desc", LocalDateTime.now(),
@@ -55,7 +58,7 @@ class TaskMapperTest {
 
     @Test
     void whenTaskListToTaskDtoList() {
-        User user = new User(1, "name", "login", "password");
+        User user = new User(1, "name", "login", "password", TIMEZONE);
         Priority priority = new Priority(1, "name", 1);
         Category category = new Category(1, "Работа");
         List<Task> taskSet = List.of(new Task(1, user, "name", "desc", LocalDateTime.now(),

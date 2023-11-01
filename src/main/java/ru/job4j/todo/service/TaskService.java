@@ -19,9 +19,9 @@ public interface TaskService {
 
     Optional<TaskDto> getById(Integer taskId);
 
-    List<TaskDto> getAll();
+    List<TaskDto> getAll(String timezone);
 
-    List<TaskDto> getAllCompletedTasks();
+    List<TaskDto> getAllCompletedTasks(String timezone);
 
-    List<TaskDto> getNewTasks();
+    List<TaskDto> getNewTasks(String timezone);
 }

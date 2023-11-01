@@ -7,10 +7,13 @@ import org.springframework.web.bind.annotation.*;
 import ru.job4j.todo.model.dto.TaskDto;
 import ru.job4j.todo.model.entity.Category;
 import ru.job4j.todo.model.entity.Priority;
+import ru.job4j.todo.model.entity.User;
 import ru.job4j.todo.service.CategoryService;
 import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,8 +32,9 @@ public class TaskController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public String getTasks(Model model) {
-        List<TaskDto> tasks = taskService.getAll();
+    public String getTasks(Model model, HttpServletRequest request) {
+        String timezone = getUserTimezone(request);
+        List<TaskDto> tasks = taskService.getAll(timezone);
         model.addAttribute("tasks", tasks);
         return "tasks/list";
     }
@@ -51,15 +55,17 @@ public class TaskController {
     }
 
     @GetMapping("/completed")
-    public String getCompletedTasks(Model model) {
-        List<TaskDto> tasks = taskService.getAllCompletedTasks();
+    public String getCompletedTasks(Model model, HttpServletRequest request) {
+        String timezone = getUserTimezone(request);
+        List<TaskDto> tasks = taskService.getAllCompletedTasks(timezone);
         model.addAttribute("tasks", tasks);
         return "tasks/list";
     }
 
     @GetMapping("/new")
-    public String getNewTasks(Model model) {
-        List<TaskDto> tasks = taskService.getNewTasks();
+    public String getNewTasks(Model model, HttpServletRequest request) {
+        String timezone = getUserTimezone(request);
+        List<TaskDto> tasks = taskService.getNewTasks(timezone);
         model.addAttribute("tasks", tasks);
         return "tasks/list";
     }
@@ -117,6 +123,12 @@ public class TaskController {
             return "errors/404";
         }
         return "redirect:/tasks";
+    }
+
+    private String getUserTimezone(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        return user.getTimezone();
     }
 
 }

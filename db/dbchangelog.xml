@@ -14,4 +14,7 @@
     <include file="scripts/006__ddl_create_categories_table.sql" relativeToChangelogFile="true"/>
     <include file="scripts/007__ddl_create_tasks_categories_table.sql" relativeToChangelogFile="true"/>
     <include file="scripts/008__dml_insert_categories_table.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/009__dml_update_users_table.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/010__dml_update_tasks_table.sql" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>

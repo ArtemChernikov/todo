@@ -13,10 +13,8 @@ import ru.job4j.todo.repository.TaskRepository;
 import ru.job4j.todo.repository.UserRepository;
 import ru.job4j.todo.util.mapper.TaskMapper;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -93,24 +91,21 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskDto> getAll() {
+    public List<TaskDto> getAll(String timezone) {
         List<Task> taskList = taskRepository.findAll();
-        return taskList.stream().map(task ->
-                mapper.taskToTaskDto(task, getCategoryNames(task.getCategories()))).toList();
+        return getTaskDtoListWithTimezone(taskList, timezone);
     }
 
     @Override
-    public List<TaskDto> getAllCompletedTasks() {
+    public List<TaskDto> getAllCompletedTasks(String timezone) {
         List<Task> taskList = taskRepository.findTasksByDone(true);
-        return taskList.stream().map(task ->
-                mapper.taskToTaskDto(task, getCategoryNames(task.getCategories()))).toList();
+        return getTaskDtoListWithTimezone(taskList, timezone);
     }
 
     @Override
-    public List<TaskDto> getNewTasks() {
+    public List<TaskDto> getNewTasks(String timezone) {
         List<Task> taskList = taskRepository.findTasksByDone(false);
-        return taskList.stream().map(task ->
-                mapper.taskToTaskDto(task, getCategoryNames(task.getCategories()))).toList();
+        return getTaskDtoListWithTimezone(taskList, timezone);
     }
 
     private User getUserByLogin(String userLogin) {
@@ -125,6 +120,17 @@ public class TaskServiceImpl implements TaskService {
 
     private Set<String> getCategoryNames(Set<Category> categories) {
         return categories.stream().map(Category::getName).collect(Collectors.toSet());
+    }
+
+    private List<TaskDto> getTaskDtoListWithTimezone(List<Task> tasks, String timezone) {
+        List<TaskDto> taskDtoList = new ArrayList<>();
+        for (Task task : tasks) {
+            TaskDto taskDto = mapper.taskToTaskDto(task, getCategoryNames(task.getCategories()));
+            taskDto.setCreated(taskDto.getCreated().atZone(ZoneId.of("UTC"))
+                    .withZoneSameInstant(ZoneId.of(timezone)).toLocalDateTime());
+            taskDtoList.add(taskDto);
+        }
+        return taskDtoList;
     }
 
 }

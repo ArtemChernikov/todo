@@ -16,10 +16,7 @@ import ru.job4j.todo.model.entity.User;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiPredicate;
 
 import static org.assertj.core.api.Assertions.*;
@@ -58,6 +55,7 @@ class TaskRepositoryImplTest {
                 .login("login")
                 .password("password")
                 .name("name")
+                .timezone(TimeZone.getDefault().getID())
                 .build();
         priority = priorityRepository.findById(1).get();
         categories = new HashSet<>(categoryRepository.findByIdIn(List.of(1, 2)));

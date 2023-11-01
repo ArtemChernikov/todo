@@ -7,10 +7,13 @@ import org.springframework.ui.Model;
 import ru.job4j.todo.model.dto.TaskDto;
 import ru.job4j.todo.model.entity.Category;
 import ru.job4j.todo.model.entity.Priority;
+import ru.job4j.todo.model.entity.User;
 import ru.job4j.todo.service.CategoryService;
 import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -25,27 +28,34 @@ class TaskControllerTest {
     private TaskService taskService;
     private PriorityService priorityService;
     private CategoryService categoryService;
+    private HttpServletRequest request;
+    private HttpSession session;
 
     @BeforeEach
     public void init() {
         taskService = mock(TaskService.class);
         priorityService = mock(PriorityService.class);
         categoryService = mock(CategoryService.class);
+        request = mock(HttpServletRequest.class);
+        session = mock(HttpSession.class);
         taskController = new TaskController(taskService, priorityService, categoryService);
     }
 
     @Test
     void whenGetTasks() {
+        User user = new User(1, "name", "login", "password", "UTC");
         Category category = new Category(1, "Работа");
         TaskDto task1 = new TaskDto(1, "login", "name1", "desc1", LocalDateTime.now(),
                 true, "urgently", Set.of(category.getName()));
         TaskDto task2 = new TaskDto(1, "login", "name2", "desc2", LocalDateTime.now(),
                 true, "urgently", Set.of(category.getName()));
         List<TaskDto> taskDtoList = List.of(task1, task2);
-        when(taskService.getAll()).thenReturn(taskDtoList);
+        when(taskService.getAll(any())).thenReturn(taskDtoList);
+        when(request.getSession()).thenReturn(session);
+        when(session.getAttribute(any())).thenReturn(user);
 
         Model model = new ConcurrentModel();
-        String view = taskController.getTasks(model);
+        String view = taskController.getTasks(model, request);
         Object tasks = model.getAttribute("tasks");
 
         assertThat(view).isEqualTo("tasks/list");
@@ -67,16 +77,19 @@ class TaskControllerTest {
 
     @Test
     void whenGetCompletedTasks() {
+        User user = new User(1, "name", "login", "password", "UTC");
         Category category = new Category(1, "Работа");
         TaskDto task1 = new TaskDto(1, "login", "name1", "desc1", LocalDateTime.now(),
                 true, "urgently", Set.of(category.getName()));
         TaskDto task2 = new TaskDto(1, "login", "name2", "desc2", LocalDateTime.now(),
                 true, "urgently", Set.of(category.getName()));
         List<TaskDto> taskDtoList = List.of(task1, task2);
-        when(taskService.getAllCompletedTasks()).thenReturn(taskDtoList);
+        when(taskService.getAllCompletedTasks(any())).thenReturn(taskDtoList);
+        when(request.getSession()).thenReturn(session);
+        when(session.getAttribute(any())).thenReturn(user);
 
         Model model = new ConcurrentModel();
-        String view = taskController.getCompletedTasks(model);
+        String view = taskController.getCompletedTasks(model, request);
         Object tasks = model.getAttribute("tasks");
 
         assertThat(view).isEqualTo("tasks/list");
@@ -85,16 +98,19 @@ class TaskControllerTest {
 
     @Test
     void whenGetNewTasks() {
+        User user = new User(1, "name", "login", "password", "UTC");
         Category category = new Category(1, "Работа");
         TaskDto task1 = new TaskDto(1, "login", "name1", "desc1", LocalDateTime.now(),
                 false, "urgently", Set.of(category.getName()));
         TaskDto task2 = new TaskDto(1, "login", "name2", "desc2", LocalDateTime.now(),
                 false, "urgently", Set.of(category.getName()));
         List<TaskDto> taskDtoList = List.of(task1, task2);
-        when(taskService.getNewTasks()).thenReturn(taskDtoList);
+        when(taskService.getNewTasks(any())).thenReturn(taskDtoList);
+        when(request.getSession()).thenReturn(session);
+        when(session.getAttribute(any())).thenReturn(user);
 
         Model model = new ConcurrentModel();
-        String view = taskController.getNewTasks(model);
+        String view = taskController.getNewTasks(model, request);
         Object tasks = model.getAttribute("tasks");
 
         assertThat(view).isEqualTo("tasks/list");

@@ -2,6 +2,7 @@ package ru.job4j.todo.service;
 
 import ru.job4j.todo.model.entity.User;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -14,5 +15,9 @@ public interface UserService {
     Optional<User> save(User user);
 
     Optional<User> getByLoginAndPassword(String login, String password);
+
+    String getDefaultTimezone();
+
+    List<String> getTimezones();
 
 }

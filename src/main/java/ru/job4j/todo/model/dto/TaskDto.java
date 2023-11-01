@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,7 +23,7 @@ public class TaskDto {
     private String userLogin;
     private String name;
     private String description;
-    private LocalDateTime created = LocalDateTime.now();
+    private LocalDateTime created = LocalDateTime.now(ZoneId.of("UTC"));
     private boolean done = false;
     private String priorityName;
     private Set<String> categoryNames = new HashSet<>();
