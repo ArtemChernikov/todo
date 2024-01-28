@@ -7,10 +7,11 @@
 # BlueJ files
 *.ctxt
 
-*.db
-
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
+
+# Database
+*.db
 
 # Package Files #
 *.jar
